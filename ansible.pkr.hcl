@@ -18,19 +18,23 @@ build {
   ]
   provisioner "shell" {
     inline = [
-      "apt -y update",
-      "apt install -y --no-install-recommends ansible -t buster-backports"
+      "apt-get update -y",
+      "apt-get upgrade -y",
+      "apt-get install -y --no-install-recommends ansible -t buster-backports",
+      "apt-get autoremove",
+      "apt-get autoclean",
     ]
   }
   post-processors {
     post-processor "docker-import" {
       repository = "wate/ansible"
+      tag        = "latest"
     }
-    post-processor "docker-push" { 
+    post-processor "docker-push" {
       keep_input_artifact = false
-      login = true
-      login_username = "${var.login_username}"
-      login_password = "${var.login_password}"
+      login               = true
+      login_username      = "${var.login_username}"
+      login_password      = "${var.login_password}"
     }
   }
 }
