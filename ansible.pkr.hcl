@@ -7,20 +7,25 @@ variable "login_password" {
   default = "${env("PUSH_LOGIN_PASSWORD")}"
 }
 
-source "docker" "buster" {
-  image       = "debian:buster-backports"
-  export_path = "ansible.tar"
+source "docker" "bullseye" {
+  image       = "debian:bullseye-backports"
+  export_path = "bullseye.tar"
+}
+
+source "docker" "bookworm" {
+  image       = "debian:bookworm-backports"
+  export_path = "bookworm.tar"
 }
 
 build {
   sources = [
-    "source.docker.buster"
+    "source.docker.bullseye"
   ]
   provisioner "shell" {
     inline = [
       "apt-get update -y",
       "apt-get upgrade -y",
-      "apt-get install -y --no-install-recommends ansible -t buster-backports",
+      "apt-get install -y --no-install-recommends ansible -t bullseye-backports",
       "apt-get autoremove",
       "apt-get autoclean",
     ]
